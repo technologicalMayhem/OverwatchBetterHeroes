@@ -17,7 +17,7 @@ regel("Brigitte Super Charge")
 	{
 		Set Move Speed(Event Player, 800);
 		Set Damage Dealt(Event Player, 300);
-		Wait(0.500, Ignore Condition);
+		Wait(0.200, Ignore Condition);
 		Set Move Speed(Event Player, 100);
 		Set Damage Dealt(Event Player, 100);
 	}
