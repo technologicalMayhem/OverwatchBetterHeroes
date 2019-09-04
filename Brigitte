@@ -1,0 +1,47 @@
+regel("Brigitte - Super Push")
+{
+	event
+	{
+		Player Dealt Damage;
+		All;
+		Brigitte;
+	}
+
+	bedingungen
+	{
+		Player Variable(Event Player, A) == True;
+	}
+
+	aktionen
+	{
+		Apply Impulse(Victim, World Vector Of(Forward, Event Player, Rotation), 30, To World, Incorporate Contrary Motion);
+		Apply Impulse(Victim, Up, 2, To World, Incorporate Contrary Motion);
+	}
+}
+
+regel("Brigitte - Super Charge")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	bedingungen
+	{
+		Is Firing Primary(Event Player) == True;
+		Is Firing Secondary(Event Player) == True;
+	}
+
+	aktionen
+	{
+		Set Player Variable(Event Player, A, True);
+		Set Move Speed(Event Player, 800);
+		Set Damage Dealt(Event Player, 300);
+		Wait(0.200, Ignore Condition);
+		Set Move Speed(Event Player, 100);
+		Set Damage Dealt(Event Player, 100);
+		Set Player Variable(Event Player, A, False);
+	}
+}
