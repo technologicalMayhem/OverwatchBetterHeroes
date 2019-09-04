@@ -1,0 +1,24 @@
+regel("Brigitte Super Charge")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	bedingungen
+	{
+		Is Firing Primary(Event Player) == True;
+		Is Firing Secondary(Event Player) == True;
+	}
+
+	aktionen
+	{
+		Set Move Speed(Event Player, 800);
+		Set Damage Dealt(Event Player, 300);
+		Wait(0.500, Ignore Condition);
+		Set Move Speed(Event Player, 100);
+		Set Damage Dealt(Event Player, 100);
+	}
+}
