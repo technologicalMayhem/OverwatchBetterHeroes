@@ -1,0 +1,45 @@
+regel("Orisa - Heal Others")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	bedingungen
+	{
+		Is True For Any(Players On Hero(Hero(Orisa), All Teams), And(Is Using Ability 1(Current Array Element), Compare(Distance Between(
+			Event Player, Current Array Element), <, 5))) == True;
+	}
+
+	aktionen
+	{
+		Heal(Event Player, Null, 8);
+		Wait(0.200, Ignore Condition);
+		Loop If Condition Is True;
+	}
+}
+
+regel("Orisa - Heal Others Ring")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		Orisa;
+	}
+
+	bedingungen
+	{
+		Is Using Ability 1(Event Player) == True;
+	}
+
+	aktionen
+	{
+		Create Effect(All Players(All Teams), Ring, Yellow, Event Player, 5, Visible To Position and Radius);
+		Set Player Variable(Event Player, A, Last Created Entity);
+		Wait(4, Ignore Condition);
+		Destroy Effect(Player Variable(Event Player, A));
+	}
+}
