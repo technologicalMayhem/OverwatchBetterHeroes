@@ -1,0 +1,21 @@
+regel("Record Hero History")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	bedingungen
+	{
+		And(Is In Spawn Room(Event Player), Compare(First Of(Player Variable(Event Player, Z)), !=, Hero Of(Event Player))) == True;
+	}
+
+	aktionen
+	{
+		Skip If(Compare(Player Variable(Event Player, Z), !=, 0), 1);
+		Set Player Variable(Event Player, Z, Empty Array);
+		Set Player Variable(Event Player, Z, Append To Array(Hero Of(Event Player), Player Variable(Event Player, Z)));
+	}
+}
