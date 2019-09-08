@@ -80,9 +80,6 @@ regel("Mercy - Corpse Recall")
 		Teleport(Value In Array(Player Variable(Event Player, A), 4), Nearest Walkable Position(Add(Vector(Random Integer(-3.000, 3),
 			Random Integer(-3.000, 3), Random Integer(-3.000, 3)), Nearest Walkable Position(Position Of(Event Player)))));
 		Set Player Variable(Event Player, A, All Dead Players(Team Of(Event Player)));
-		deaktiviert Resurrect(Player Variable(Event Player, A));
-		deaktiviert Wait(0.050, Ignore Condition);
-		deaktiviert Kill(Player Variable(Event Player, A), Null);
 	}
 }
 
