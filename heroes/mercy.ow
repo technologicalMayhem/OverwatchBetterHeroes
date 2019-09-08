@@ -1,0 +1,230 @@
+regel("Mercy - Initialisation")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		Mercy;
+	}
+
+	aktionen
+	{
+		Disable Built-In Game Mode Respawning(Remove From Array(All Players(Team Of(Event Player)), Event Player));
+		Set Player Variable At Index(Event Player, B, 6, 100);
+		Create HUD Text(Event Player, String("{0}:{1}", String("Wiederherstellung", Null, Null, Null), String("Bereit", Null, Null, Null),
+			Null), Null, Null, Left, 0, White, White, White, String);
+		Set Player Variable At Index(Event Player, B, 8, Last Text ID);
+	}
+}
+
+regel("Mercy - Ensure Player is Reviable")
+{
+	event
+	{
+		Player Died;
+		All;
+		All;
+	}
+
+	bedingungen
+	{
+		Is Hero Being Played(Hero(Mercy), Team Of(Event Player)) == True;
+		Is On Ground(Event Player) == False;
+	}
+
+	aktionen
+	{
+		Teleport(Event Player, Nearest Walkable Position(Event Player));
+		Resurrect(Event Player);
+		Wait(0.050, Ignore Condition);
+		Kill(Event Player, Null);
+		Loop If Condition Is True;
+	}
+}
+
+regel("Mercy - Corpse Recall")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		Mercy;
+	}
+
+	bedingungen
+	{
+		Is Communicating(Event Player, Voice Line Up) == True;
+		Number of Dead Players(Team Of(Event Player)) > 0;
+	}
+
+	aktionen
+	{
+		Skip If(Compare(Value In Array(Player Variable(Event Player, B), 6), >=, 100), 2);
+		Big Message(All Players(All Teams), String("{0} {1} {2}", String("Mehr", Null, Null, Null), String("Heilung", Null, Null, Null),
+			String("Liefern", Null, Null, Null)));
+		Abort;
+		Set Player Variable At Index(Event Player, B, 6, 0);
+		Destroy HUD Text(Value In Array(Player Variable(Event Player, B), 8));
+		Create HUD Text(Event Player, String("{0}:{1}", String("Wiederherstellung", Null, Null, Null), String("{0}%", Value In Array(
+			Player Variable(Event Player, B), 6), Null, Null), Null), Null, Null, Left, 0, White, White, White, String);
+		Set Player Variable At Index(Event Player, B, 8, Last Text ID);
+		Set Player Variable(Event Player, A, All Dead Players(Team Of(Event Player)));
+		Teleport(Value In Array(Player Variable(Event Player, A), 0), Nearest Walkable Position(Add(Vector(Random Integer(-3.000, 3),
+			Random Integer(-3.000, 3), Random Integer(-3.000, 3)), Nearest Walkable Position(Position Of(Event Player)))));
+		Teleport(Value In Array(Player Variable(Event Player, A), 1), Nearest Walkable Position(Add(Vector(Random Integer(-3.000, 3),
+			Random Integer(-3.000, 3), Random Integer(-3.000, 3)), Nearest Walkable Position(Position Of(Event Player)))));
+		Teleport(Value In Array(Player Variable(Event Player, A), 2), Nearest Walkable Position(Add(Vector(Random Integer(-3.000, 3),
+			Random Integer(-3.000, 3), Random Integer(-3.000, 3)), Nearest Walkable Position(Position Of(Event Player)))));
+		Teleport(Value In Array(Player Variable(Event Player, A), 3), Nearest Walkable Position(Add(Vector(Random Integer(-3.000, 3),
+			Random Integer(-3.000, 3), Random Integer(-3.000, 3)), Nearest Walkable Position(Position Of(Event Player)))));
+		Teleport(Value In Array(Player Variable(Event Player, A), 4), Nearest Walkable Position(Add(Vector(Random Integer(-3.000, 3),
+			Random Integer(-3.000, 3), Random Integer(-3.000, 3)), Nearest Walkable Position(Position Of(Event Player)))));
+		Set Player Variable(Event Player, A, All Dead Players(Team Of(Event Player)));
+		deaktiviert Resurrect(Player Variable(Event Player, A));
+		deaktiviert Wait(0.050, Ignore Condition);
+		deaktiviert Kill(Player Variable(Event Player, A), Null);
+	}
+}
+
+regel("Mercy - Corpse Recall Charge")
+{
+	event
+	{
+		Player Dealt Healing;
+		All;
+		Mercy;
+	}
+
+	aktionen
+	{
+		Set Player Variable At Index(Event Player, B, 6, Min(100, Add(Value In Array(Player Variable(Event Player, B), 6), Divide(
+			Event Healing, Divide(Number of Dead Players(Team Of(Event Player)), 40)))));
+	}
+}
+
+regel("Mercy - Corpse Recall Fully Charged")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		Mercy;
+	}
+
+	bedingungen
+	{
+		Value In Array(Player Variable(Event Player, B), 6) >= 100;
+	}
+
+	aktionen
+	{
+		Destroy HUD Text(Value In Array(Player Variable(Event Player, B), 8));
+		Create HUD Text(Event Player, String("{0}:{1}", String("Wiederherstellung", Null, Null, Null), String("Bereit", Null, Null, Null),
+			Null), Null, Null, Left, 0, White, White, White, String);
+		Set Player Variable At Index(Event Player, B, 8, Last Text ID);
+	}
+}
+
+regel("Mercy - Ultimate Buff")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		Mercy;
+	}
+
+	bedingungen
+	{
+		Is Using Ultimate(Event Player) == True;
+	}
+
+	aktionen
+	{
+		Set Move Speed(Event Player, 130);
+	}
+}
+
+regel("Mercy - Ultimate Buff Removal")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		Mercy;
+	}
+
+	bedingungen
+	{
+		Is Using Ultimate(Event Player) == False;
+	}
+
+	aktionen
+	{
+		Set Move Speed(Event Player, 100);
+	}
+}
+
+regel("Mercy - Death Icon")
+{
+	event
+	{
+		Player Died;
+		All;
+		All;
+	}
+
+	bedingungen
+	{
+		Is Hero Being Played(Hero(Mercy), Team Of(Event Player)) == True;
+	}
+
+	aktionen
+	{
+		Create Icon(Players On Hero(Hero(Mercy), Team Of(Event Player)), Position Of(Event Player), Skull, None, Yellow, True);
+		Set Player Variable At Index(Players On Hero(Hero(Mercy), Team Of(Event Player)), B, Slot Of(Event Player), Last Created Entity);
+	}
+}
+
+regel("Mercy - Remove Icon")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	bedingungen
+	{
+		Is Hero Being Played(Hero(Mercy), Team Of(Event Player)) == True;
+		Is Dead(Event Player) == False;
+	}
+
+	aktionen
+	{
+		Destroy Icon(Value In Array(Player Variable(Players On Hero(Hero(Mercy), Team Of(Event Player)), B), Slot Of(Event Player)));
+	}
+}
+
+regel("Mercy - Cleanup")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	bedingungen
+	{
+		Value In Array(Player Variable(Event Player, Z), 1) == Hero(Mercy);
+	}
+
+	aktionen
+	{
+		Enable Built-In Game Mode Respawning(All Players(Team Of(Event Player)));
+		Destroy Icon(Player Variable(Event Player, B));
+		Destroy HUD Text(Value In Array(Player Variable(Event Player, B), 8));
+	}
+}
