@@ -1,0 +1,66 @@
+regel("Sombra - Speed Boost")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		Sombra;
+	}
+
+	aktionen
+	{
+		Set Player Variable(Event Player, B, 100);
+		Skip If(Or(Is Dead(Players In Slot(0, Opposite Team Of(Team Of(Event Player)))), Compare(Players In Slot(0, Opposite Team Of(
+			Team Of(Event Player))), ==, Null)), 1);
+		Modify Player Variable(Event Player, B, Add, Max(0, Multiply(30, Subtract(1, Divide(Normalized Health(Players In Slot(0,
+			Opposite Team Of(Team Of(Event Player)))), 0.750)))));
+		Skip If(Or(Is Dead(Players In Slot(1, Opposite Team Of(Team Of(Event Player)))), Compare(Players In Slot(1, Opposite Team Of(
+			Team Of(Event Player))), ==, Null)), 1);
+		Modify Player Variable(Event Player, B, Add, Max(0, Multiply(30, Subtract(1, Divide(Normalized Health(Players In Slot(1,
+			Opposite Team Of(Team Of(Event Player)))), 0.750)))));
+		Skip If(Or(Is Dead(Players In Slot(2, Opposite Team Of(Team Of(Event Player)))), Compare(Players In Slot(2, Opposite Team Of(
+			Team Of(Event Player))), ==, Null)), 1);
+		Modify Player Variable(Event Player, B, Add, Max(0, Multiply(30, Subtract(1, Divide(Normalized Health(Players In Slot(2,
+			Opposite Team Of(Team Of(Event Player)))), 0.750)))));
+		Skip If(Or(Is Dead(Players In Slot(3, Opposite Team Of(Team Of(Event Player)))), Compare(Players In Slot(3, Opposite Team Of(
+			Team Of(Event Player))), ==, Null)), 1);
+		Modify Player Variable(Event Player, B, Add, Max(0, Multiply(30, Subtract(1, Divide(Normalized Health(Players In Slot(3,
+			Opposite Team Of(Team Of(Event Player)))), 0.750)))));
+		Skip If(Or(Is Dead(Players In Slot(4, Opposite Team Of(Team Of(Event Player)))), Compare(Players In Slot(4, Opposite Team Of(
+			Team Of(Event Player))), ==, Null)), 1);
+		Modify Player Variable(Event Player, B, Add, Max(0, Multiply(30, Subtract(1, Divide(Normalized Health(Players In Slot(4,
+			Opposite Team Of(Team Of(Event Player)))), 0.750)))));
+		Skip If(Or(Is Dead(Players In Slot(5, Opposite Team Of(Team Of(Event Player)))), Compare(Players In Slot(5, Opposite Team Of(
+			Team Of(Event Player))), ==, Null)), 1);	
+		Modify Player Variable(Event Player, B, Add, Max(0, Multiply(30, Subtract(1, Divide(Normalized Health(Players In Slot(5,
+			Opposite Team Of(Team Of(Event Player)))), 0.750)))));
+		Set Move Speed(Event Player, Player Variable(Event Player, B));
+		Wait(0.250, Ignore Condition);
+		Loop;
+	}
+}
+regel("Sombra - Do Damage on Hack")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	bedingungen
+	{
+		Has Status(Event Player, Hacked) == True;
+	}
+
+	aktionen
+	{
+		Set Player Variable At Index(Players On Hero(Hero(Sombra), Opposite Team Of(Team Of(Event Player))), A, Slot Of(Event Player),
+			Position Of(Event Player));
+		Wait(0.250, Ignore Condition);
+		Damage(Event Player, Players On Hero(Hero(Sombra), Opposite Team Of(Team Of(Event Player))), Multiply(Distance Between(
+			Value In Array(Player Variable(Players On Hero(Hero(Sombra), Opposite Team Of(Team Of(Event Player))), A), Slot Of(
+			Event Player)), Position Of(Event Player)), 5));
+		Loop If Condition Is True;
+	}
+}

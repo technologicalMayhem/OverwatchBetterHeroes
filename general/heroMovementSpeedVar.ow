@@ -1,0 +1,20 @@
+regel("Reset Movement Speed on Spawn")
+{
+	event
+	{
+		Ongoing - Each Player;
+		All;
+		All;
+	}
+
+	bedingungen
+	{
+		Has Spawned(Event Player) == True;
+	}
+
+	aktionen
+	{
+		Set Player Variable(Event Player, Y, 100);
+		Set Move Speed(Event Player, Player Variable(Event Player, Y));
+	}
+}
